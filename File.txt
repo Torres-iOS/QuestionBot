@@ -1,0 +1,78 @@
+Explicação das Alterações:
+Variáveis alertTitle e alertMessage:
+
+Declarei alertTitle e alertMessage como variáveis não opcionais (String), assegurando que sempre terão um valor antes de serem usadas.
+Variável keywordFound:
+
+Usei uma variável booleana keywordFound para rastrear se uma palavra-chave foi encontrada.
+Verificação de palavras-chave:
+
+O loop for percorre as palavras-chave. Se encontrar uma palavra-chave, alertTitle e alertMessage são configurados com os valores correspondentes e keywordFound é definida como true. O loop então é interrompido (break).
+Mensagem padrão:
+
+Se nenhuma palavra-chave for encontrada (keywordFound for false), alertTitle e alertMessage são configurados com valores padrão.
+Criação do UIAlertController:
+
+UIAlertController é criado com o título e a mensagem determinados pelas condições acima.
+Comportamento:
+Quando uma palavra-chave é encontrada: O alerta exibirá o título "Alerta!" e a mensagem correspondente à palavra-chave.
+Quando nenhuma palavra-chave é encontrada: O alerta exibirá o título "Interação com o Gênio" e a mensagem padrão "Texto digitado: (searchText)".
+
+
+
+import UIKit
+
+class ViewController: UIViewController {
+    
+    @IBOutlet weak var textField: UITextField!
+    
+    // Arrays para palavras-chave e mensagens correspondentes
+    let keywords = ["desejo", "ajuda", "conselho", "gênio"]
+    let messages = [
+        "desejo": "Seu desejo é uma ordem!",
+        "ajuda": "Estou aqui para ajudar!",
+        "conselho": "Aqui está um conselho sábio: sempre acredite em si mesmo.",
+        "gênio": "Você encontrou o gênio da lâmpada!"
+    ]
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Configurações adicionais após carregar a view.
+    }
+    
+    @IBAction func buttonPressed(_ sender: UIButton) {
+        // Obtém o texto da textField
+        guard let searchText = textField.text?.lowercased() else { return }
+        
+        // Variáveis para título e mensagem do alerta
+        let alertTitle: String
+        let alertMessage: String
+        
+        // Verifica se o texto contém alguma palavra-chave
+        var keywordFound = false
+        for keyword in keywords {
+            if searchText.contains(keyword) {
+                alertTitle = "Alerta!"
+                alertMessage = messages[keyword]!
+                keywordFound = true
+                break
+            }
+        }
+        
+        // Se nenhuma palavra-chave for encontrada, defina uma mensagem padrão
+        if !keywordFound {
+            alertTitle = "Interação com o Gênio"
+            alertMessage = "Texto digitado: \(searchText)"
+        }
+        
+        // Cria o UIAlertController
+        let alertController = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .alert)
+        
+        // Adiciona um botão de ação OK
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        
+        // Apresenta o alerta
+        present(alertController, animated: true, completion: nil)
+    }
+}
